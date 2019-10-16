@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+group 'dev.jko'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:[1.0, )'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.slf4j:slf4j-simple:[1.0, )'
+}
+
+jar {
+    manifest {
+        attributes("Premain-Class": "dev.jko.StillAliveAgent")
+    }
+}
+
+test {
+    dependsOn jar
+    systemProperty 'dev.jko.alive.interval', '2000'
+    systemProperty 'dev.jko.alive.delay', '1000'
+    jvmArgs "-javaagent:${files(jar).singleFile}"
+}
